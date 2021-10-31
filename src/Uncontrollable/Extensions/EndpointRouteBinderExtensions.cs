@@ -28,7 +28,12 @@ namespace Uncontrollable
                     var handlerType = typeof(WeakRequestHandler<>).MakeGenericType(matchedRequest.RequestType);
                     var handler = (IWeakRequestHandler)context.RequestServices.GetRequiredService(handlerType);
 
-                    await handler.Handle(matchedRequest.RequestObject, context.Response);
+                    var response = await handler.Handle(matchedRequest.RequestObject);
+
+                    var writer = context.RequestServices.GetService<IResponseWriter<object>>();
+                    // TODO use custom writers per type
+                    await writer.Write(response, context.Response);
+
                     return;
                 }
 

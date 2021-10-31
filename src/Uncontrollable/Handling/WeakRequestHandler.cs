@@ -1,16 +1,15 @@
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 
 namespace Uncontrollable
 {
-    internal class WeakRequestHandler<T> : IWeakRequestHandler
+    internal class WeakRequestHandler<TRequest> : IWeakRequestHandler
     {
-        private readonly IRequestHandler<T> _strongHandler;
+        private readonly IRequestHandler<TRequest> _strongHandler;
 
-        public WeakRequestHandler(IRequestHandler<T> strongHandler)
+        public WeakRequestHandler(IRequestHandler<TRequest> strongHandler)
             => _strongHandler = strongHandler;
 
-        public Task Handle(object request, HttpResponse response)
-            => _strongHandler.Handle((T)request, response);
+        public Task<object> Handle(object request)
+            => _strongHandler.Handle((TRequest)request);
     }
 }

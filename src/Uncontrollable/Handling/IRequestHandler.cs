@@ -1,10 +1,9 @@
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 
 namespace Uncontrollable
 {
-    public interface IRequestHandler<in T>
+    public interface IRequestHandler<in TRequest>
     {
-        Task Handle(T request, HttpResponse response);
+        Task<object> Handle(TRequest request);
     }
 }
