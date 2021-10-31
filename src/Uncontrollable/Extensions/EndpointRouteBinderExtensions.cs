@@ -16,19 +16,19 @@ namespace Uncontrollable
 
             return endpoints.MapGet("/{*name}", async context =>
             {
-                var finders = context.RequestServices.GetRequiredService<IEnumerable<IRequestFinder>>();
+                var binders = context.RequestServices.GetRequiredService<IEnumerable<IRequestBinder>>();
                 
-                foreach(var finder in finders)
+                foreach(var binder in binders)
                 {
-                    var matchedRequest = finder.Find(context);
+                    var request = binder.Bind(context);
 
-                    if(matchedRequest.IsMatched == false)
+                    if(request == null)
                         continue;
                     
-                    var handlerType = typeof(WeakRequestHandler<>).MakeGenericType(matchedRequest.RequestType);
+                    var handlerType = typeof(WeakRequestHandler<>).MakeGenericType(request.GetType());
                     var handler = (IWeakRequestHandler)context.RequestServices.GetRequiredService(handlerType);
 
-                    var response = await handler.Handle(matchedRequest.RequestObject);
+                    var response = await handler.Handle(request);
 
                     var writer = context.RequestServices.GetService<IResponseWriter<object>>();
                     // TODO use custom writers per type
