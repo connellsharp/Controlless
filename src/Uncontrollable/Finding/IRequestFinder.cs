@@ -2,8 +2,8 @@ using Microsoft.AspNetCore.Http;
 
 namespace Uncontrollable
 {
-    internal interface IRequestFinder
+    public interface IRequestFinder
     {
-        object Find(HttpContext context);
+        IMatchedRequest Find(HttpContext context);
     }
 }

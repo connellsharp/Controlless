@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,13 +16,23 @@ namespace Uncontrollable
 
             return endpoints.MapGet("/{*name}", async context =>
             {
-                var finder = context.RequestServices.GetRequiredService<IRequestFinder>();
+                var finders = context.RequestServices.GetRequiredService<IEnumerable<IRequestFinder>>();
                 
-                var request = finder.Find(context);
-                
-                var handler = (IWeakRequestHandler)context.RequestServices.GetRequiredService(typeof(WeakRequestHandler<>).MakeGenericType(request.GetType()));
+                foreach(var finder in finders)
+                {
+                    var matchedRequest = finder.Find(context);
 
-                await handler.Handle(request, context.Response);
+                    if(matchedRequest.IsMatched == false)
+                        continue;
+                    
+                    var handlerType = typeof(WeakRequestHandler<>).MakeGenericType(matchedRequest.RequestType);
+                    var handler = (IWeakRequestHandler)context.RequestServices.GetRequiredService(handlerType);
+
+                    await handler.Handle(matchedRequest.RequestObject, context.Response);
+                    return;
+                }
+
+                // TODO handle no matched request
             });
         }
     }
