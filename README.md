@@ -16,7 +16,7 @@ internal class WatchFilmRequestBinder : IRequestBinder
             
         return new WatchFilmRequest
         {
-            FilmId = id,
+            FilmId = routeValues["id"],
             // set other props from query or body
         };
     }
