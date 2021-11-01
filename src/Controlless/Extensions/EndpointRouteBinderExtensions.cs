@@ -16,6 +16,8 @@ namespace Controlless
 
             return endpoints.MapGet("/{*name}", async context =>
             {
+                var processor = new RequestProcessor(context);
+
                 var binders = context.RequestServices.GetRequiredService<IEnumerable<IRequestBinder>>();
                 
                 foreach(var binder in binders)
@@ -24,15 +26,8 @@ namespace Controlless
 
                     if(request == null)
                         continue;
-                    
-                    var handlerType = typeof(RequestHandlerWeakAdapter<>).MakeGenericType(request.GetType());
-                    var handler = (IWeakRequestHandler)context.RequestServices.GetRequiredService(handlerType);
-
-                    var response = await handler.Handle(request, context.RequestAborted);
-
-                    var writerType = typeof(ResponseWriterWeakAdapter<>).MakeGenericType(response.GetType());
-                    var writer = (IWeakResponseWriter)context.RequestServices.GetRequiredService(writerType);
-                    await writer.Write(response, context.Response, context.RequestAborted);
+                        
+                    await processor.ProcessRequest(request);
 
                     return;
                 }
