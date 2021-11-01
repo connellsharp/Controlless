@@ -4,11 +4,11 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Uncontrollable
+namespace Controlless
 {
     public static class EndpointRouteBinderExtensions
     {
-        public static IEndpointConventionBuilder MapUncontrollable(
+        public static IEndpointConventionBuilder MapControlless(
            this IEndpointRouteBuilder endpoints)
         {
             if (endpoints == null)

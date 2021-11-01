@@ -1,7 +1,7 @@
 using System.Threading;
 using Microsoft.AspNetCore.Http;
 
-namespace Uncontrollable
+namespace Controlless
 {
     public interface IRequestBinder
     {

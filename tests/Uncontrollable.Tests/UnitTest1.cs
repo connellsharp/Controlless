@@ -1,7 +1,7 @@
 using System;
 using Xunit;
 
-namespace Uncontrollable.Tests
+namespace Controlless.Tests
 {
     public class UnitTest1
     {

@@ -1,6 +1,6 @@
-# Uncontrollable
+# Controlless
 
-Uncontrollable is a little experiment with ASP.NET to see if we can make APIs without Controllers. Instead we could bind routes to DTOs, handle them with something like [MediatR](https://github.com/jbogard/MediatR), then write the HTTP responses depending on the response type.
+Controlless is a little experiment with ASP.NET to see if we can make APIs without Controllers. Instead we could bind routes to DTOs, handle them with something like [MediatR](https://github.com/jbogard/MediatR), then write the HTTP responses depending on the response type.
 
 ## Binding
 

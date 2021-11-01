@@ -5,13 +5,13 @@ VisualStudioVersion = 16.6.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{1AC410E9-88F8-408B-B3C5-146BA5CD8C76}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Uncontrollable", "src\Uncontrollable\Uncontrollable.csproj", "{B4CC00A4-D7A9-4038-AE35-AEBE144EF426}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Controlless", "src\Controlless\Controlless.csproj", "{B4CC00A4-D7A9-4038-AE35-AEBE144EF426}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{BF3827FE-15DE-45BA-9180-67B2AA9ED40E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Uncontrollable.Tests", "tests\Uncontrollable.Tests\Uncontrollable.Tests.csproj", "{B7E6C957-018A-4A93-9EFD-6D4ECC67C811}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Controlless.Tests", "tests\Controlless.Tests\Controlless.Tests.csproj", "{B7E6C957-018A-4A93-9EFD-6D4ECC67C811}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Uncontrollable.FunctionalTests", "tests\Uncontrollable.FunctionalTests\Uncontrollable.FunctionalTests.csproj", "{3F90FDF1-923F-4787-B462-4AFE7C92E704}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Controlless.FunctionalTests", "tests\Controlless.FunctionalTests\Controlless.FunctionalTests.csproj", "{3F90FDF1-923F-4787-B462-4AFE7C92E704}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

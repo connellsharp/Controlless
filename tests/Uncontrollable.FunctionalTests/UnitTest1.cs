@@ -1,7 +1,7 @@
 using System;
 using Xunit;
 
-namespace Uncontrollable.FunctionalTests
+namespace Controlless.FunctionalTests
 {
     public class UnitTest1
     {

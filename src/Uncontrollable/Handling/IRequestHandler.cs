@@ -1,7 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Uncontrollable
+namespace Controlless
 {
     public interface IRequestHandler<in TRequest>
     {

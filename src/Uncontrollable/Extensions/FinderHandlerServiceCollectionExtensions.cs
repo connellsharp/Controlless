@@ -1,11 +1,11 @@
 using System;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Uncontrollable
+namespace Controlless
 {
     public static class FinderHandlerServiceCollectionExtensions
     {
-        public static void AddUncontrollable(
+        public static void AddControlless(
            this IServiceCollection services)
         {
             if (services == null)

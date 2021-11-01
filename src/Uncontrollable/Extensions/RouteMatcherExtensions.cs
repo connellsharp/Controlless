@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Routing.Template;
 
-namespace Uncontrollable
+namespace Controlless
 {
     /// <remarks>
     /// Inspired by https://blog.markvincze.com/matching-route-templates-manually-in-asp-net-core/
