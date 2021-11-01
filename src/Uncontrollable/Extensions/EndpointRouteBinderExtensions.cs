@@ -32,7 +32,7 @@ namespace Uncontrollable
 
                     var writerType = typeof(ResponseWriterWeakAdapter<>).MakeGenericType(response.GetType());
                     var writer = (IWeakResponseWriter)context.RequestServices.GetRequiredService(writerType);
-                    await writer.Write(response, context.Response);
+                    await writer.Write(response, context.Response, context.RequestAborted);
 
                     return;
                 }

@@ -1,3 +1,4 @@
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 
@@ -12,9 +13,9 @@ namespace Uncontrollable
             _responseWriter = responseWriter;
         }
 
-        public Task Write(object responseObject, HttpResponse httpResponse)
+        public Task Write(object responseObject, HttpResponse httpResponse, CancellationToken ct)
         {
-            return _responseWriter.Write((T)responseObject, httpResponse);
+            return _responseWriter.Write((T)responseObject, httpResponse, ct);
         }
     }
 }
