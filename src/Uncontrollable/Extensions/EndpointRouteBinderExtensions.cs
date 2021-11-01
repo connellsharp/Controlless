@@ -20,7 +20,7 @@ namespace Uncontrollable
                 
                 foreach(var binder in binders)
                 {
-                    var request = binder.Bind(context);
+                    var request = binder.Bind(context.Request, context.RequestAborted);
 
                     if(request == null)
                         continue;
@@ -28,7 +28,7 @@ namespace Uncontrollable
                     var handlerType = typeof(WeakRequestHandler<>).MakeGenericType(request.GetType());
                     var handler = (IWeakRequestHandler)context.RequestServices.GetRequiredService(handlerType);
 
-                    var response = await handler.Handle(request);
+                    var response = await handler.Handle(request, context.RequestAborted);
 
                     var writer = context.RequestServices.GetService<IResponseWriter<object>>();
                     // TODO use custom writers per type

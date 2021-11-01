@@ -1,3 +1,4 @@
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Uncontrollable
@@ -9,7 +10,7 @@ namespace Uncontrollable
         public WeakRequestHandler(IRequestHandler<TRequest> strongHandler)
             => _strongHandler = strongHandler;
 
-        public Task<object> Handle(object request)
-            => _strongHandler.Handle((TRequest)request);
+        public Task<object> Handle(object request, CancellationToken ct)
+            => _strongHandler.Handle((TRequest)request, ct);
     }
 }
