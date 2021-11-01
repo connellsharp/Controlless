@@ -30,7 +30,7 @@ namespace Uncontrollable
 
                     var response = await handler.Handle(request, context.RequestAborted);
 
-                    var writer = context.RequestServices.GetService<IResponseWriter<object>>();
+                    var writer = context.RequestServices.GetRequiredService<IResponseWriter<object>>();
                     // TODO use custom writers per type
                     await writer.Write(response, context.Response);
 

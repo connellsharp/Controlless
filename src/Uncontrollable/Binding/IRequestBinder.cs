@@ -5,6 +5,6 @@ namespace Uncontrollable
 {
     public interface IRequestBinder
     {
-        object Bind(HttpRequest request, CancellationToken ct);
+        object? Bind(HttpRequest request, CancellationToken ct);
     }
 }
