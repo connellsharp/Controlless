@@ -11,7 +11,8 @@ namespace Uncontrollable
             if (services == null)
                 throw new ArgumentNullException(nameof(services));
 
-            services.AddSingleton(typeof(WeakRequestHandler<>));
+            services.AddSingleton(typeof(RequestHandlerWeakAdapter<>));
+            services.AddSingleton(typeof(IResponseWriter<>), typeof(JsonResponseWriter<>));
         }
     }
 }
