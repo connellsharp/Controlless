@@ -1,8 +1,30 @@
 # Uncontrollable
 
-Uncontrollable is a little experiment with ASP.NET to see if we can automatically bind routes to DTOs and handle them with something like [MediatR](https://github.com/jbogard/MediatR) instead of writing Controllers.
+Uncontrollable is a little experiment with ASP.NET to see if we can make APIs without Controllers. Instead we could bind routes to DTOs, handle them with something like [MediatR](https://github.com/jbogard/MediatR), then write the HTTP responses depending on the response type.
 
-Imagine something like
+## Binding
+
+Register as many `IRequestBinder` implementations as you need. These will bind the `HttpRequest` to a request DTO.
+
+```c#
+internal class WatchFilmRequestBinder : IRequestBinder
+{
+    public object? Bind(HttpRequest request, CancellationToken ct)
+    {
+        if(request.Method != "POST" || !request.TryMatchRoute("/films/{id}/watch", out var routeValues))
+            return null;
+            
+        return new WatchFilmRequest
+        {
+            FilmId = id,
+            // set other props from query or body
+        };
+    }
+}
+```
+
+Maybe you could hook up a generic binder that uses attributes to bind straight onto the DTO.
+
 ```c#
 [HttpPut("/things/{id}/details")]
 public class UpdateThingDetailsRequest
@@ -18,12 +40,14 @@ public class UpdateThingDetailsRequest
 }
 ```
 
-Then all you do is write the handler
+## Handling
+
+Then you register a handler that does the work and returns a response object.
+
 ```c#
-[HttpPut("/things/{id}/details")]
-public class UpdateThingDetailsHandler : IRequestHandler<UpdateThingDetailsRequest>
+public class WatchFilmRequestHandler : IRequestHandler<WatchFilmRequest>
 {
-    public Task<object> Handle(UpdateThingDetailsRequest request)
+    public Task<object> Handle(WatchFilmRequest request, CancellationToken ct)
     {
         // handle the request
         return responseObject;
@@ -31,23 +55,48 @@ public class UpdateThingDetailsHandler : IRequestHandler<UpdateThingDetailsReque
 }
 ```
 
-Or if the request was already a MedaitR request, perhaps use a generic handler. We could even validate it first with [FluentValidation](https://fluentvalidation.net/).
+Or maybe you just hook up a generic handler that forwards everything to MediatR.
+
 ```c#
-[HttpPut("/things/{id}/details")]
-public class AllTheStuffHandler<TRequest> : IRequestHandler<TRequest>
+public class MediatorRequestHandler<TRequest> : IRequestHandler<TRequest>
 {
-    public AllTheStuffHandler(IValidator<TRequest> validator, IMediator mediator)
+    private readonly IMediator _mediator;
+
+    public MediatorRequestHandler(IMediator mediator)
     {
-        // set fields
+        _mediator = mediator;
     }
 
-    public async Task<object> Handle(TRequest request)
+    public async Task<object> Handle(TRequest request, CancellationToken ct)
     {
-        var validationResult = _validator.Validate(request);
-        
-        // handle validation
+        return await _mediator.Send(request, ct);
+    }
+}
+```
 
-        return await _mediator.Send(request);
+## Responding
+
+Then finally, an `IResponseWriter<T>` writes that object back to the HTTP stream. You could set one 
+
+```c#
+internal class ValidationFailureJsonResponseWriter : IResponseWriter<ValidationFailure>
+{
+    public async Task Write(ValidationFailure responseObject, HttpResponse response, CancellationToken ct)
+    {
+        response.StatusCode = 400;
+        await response.WriteAsync("Validation error", ct);
+    }
+}
+```
+
+No worries if you don't register one for every response type. It'll fall back to the generic registration that writes a JSON response.
+
+```c#
+internal class JsonResponseWriter<T> : IResponseWriter<T>
+{
+    public async Task Write(T responseObject, HttpResponse response, CancellationToken ct)
+    {
+        await response.WriteAsJsonAsync(responseObject, ct);
     }
 }
 ```
