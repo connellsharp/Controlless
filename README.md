@@ -23,7 +23,7 @@ internal class WatchFilmRequestBinder : IRequestBinder
 }
 ```
 
-Maybe you could hook up a generic binder that uses attributes to bind straight onto the DTO.
+Or instead, maybe you could hook up a generic binder that uses attributes to bind straight onto the DTOs.
 
 ```c#
 [HttpPut("/things/{id}/details")]
@@ -42,7 +42,7 @@ public class UpdateThingDetailsRequest
 
 ## Handling
 
-Then you register a handler that does the work and returns a response object.
+Then you register an `IRequestHandler<T>` that does the work and returns a response object.
 
 ```c#
 public class WatchFilmRequestHandler : IRequestHandler<WatchFilmRequest>
@@ -55,7 +55,7 @@ public class WatchFilmRequestHandler : IRequestHandler<WatchFilmRequest>
 }
 ```
 
-Or maybe you just hook up a generic handler that forwards everything to MediatR.
+Or maybe you just register a generic one that forwards everything to MediatR.
 
 ```c#
 public class MediatorRequestHandler<TRequest> : IRequestHandler<TRequest>
@@ -76,7 +76,7 @@ public class MediatorRequestHandler<TRequest> : IRequestHandler<TRequest>
 
 ## Responding
 
-Then finally, an `IResponseWriter<T>` writes that object back to the HTTP stream. You could set one 
+Then finally, an `IResponseWriter<T>` writes that object back to the HTTP stream. For example, you could create one for validation failures.
 
 ```c#
 internal class ValidationFailureJsonResponseWriter : IResponseWriter<ValidationFailure>
