@@ -8,31 +8,49 @@ namespace Controlless
 {
     public static class EndpointRouteBinderExtensions
     {
-        public static IEndpointConventionBuilder MapControlless(
+        public static void MapBinders(
            this IEndpointRouteBuilder endpoints)
         {
             if (endpoints == null)
                 throw new ArgumentNullException(nameof(endpoints));
 
-            return endpoints.MapGet("/{*name}", async context =>
+            var binders = endpoints.ServiceProvider.GetRequiredService<IEnumerable<IRequestBinder>>();
+
+            foreach(var binder in binders)
             {
-                var processor = new RequestProcessor(context);
+                endpoints.MapBinder(binder);
+            }
 
-                var binders = context.RequestServices.GetRequiredService<IEnumerable<IRequestBinder>>();
-                
-                foreach(var binder in binders)
-                {
-                    var request = binder.Bind(context.Request, context.RequestAborted);
+            // TODO return composite ConventionBuilder
+        }
 
-                    if(request == null)
-                        continue;
+        public static IEndpointConventionBuilder MapBinder<TBinder>(
+           this IEndpointRouteBuilder endpoints)
+            where TBinder : IRequestBinder
+        {
+            if (endpoints == null)
+                throw new ArgumentNullException(nameof(endpoints));
+
+            var binder = endpoints.ServiceProvider.GetRequiredService<TBinder>();
+            return endpoints.MapBinder(binder);
+        }
+
+        public static IEndpointConventionBuilder MapBinder(
+           this IEndpointRouteBuilder endpoints,
+           IRequestBinder binder)
+        {
+            if (endpoints == null)
+                throw new ArgumentNullException(nameof(endpoints));
+
+            if (binder == null)
+                throw new ArgumentNullException(nameof(binder));
+
+            return endpoints.MapMethods(binder.Route, new[] { binder.Method }, async context =>
+            {
+                var request = binder.Bind(context.Request, context.RequestAborted);
                         
-                    await processor.ProcessRequest(request);
-
-                    return;
-                }
-
-                // TODO handle no matched request
+                var processor = new RequestProcessor(context);
+                await processor.ProcessRequest(request);
             });
         }
     }

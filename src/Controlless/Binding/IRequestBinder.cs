@@ -5,6 +5,10 @@ namespace Controlless
 {
     public interface IRequestBinder
     {
-        object? Bind(HttpRequest request, CancellationToken ct);
+        string Method { get; }
+
+        string Route { get; }
+
+        object Bind(HttpRequest request, CancellationToken ct);
     }
 }
