@@ -7,21 +7,24 @@ using Microsoft.AspNetCore.Http;
 
 namespace Controlless
 {
-    public class ModelRequestBinder<T> : IRequestBinder
+    public class ModelRequestBinder<TRequest> : IRequestBinder
     {
         private ModelTypeInfo _typeInfo;
 
         public ModelRequestBinder()
         {
-            _typeInfo = new ModelTypeInfo(typeof(T));
+            _typeInfo = new ModelTypeInfo(typeof(TRequest));
         }
 
-        public object? Bind(HttpRequest request, CancellationToken ct)
-        {
-            if(!_typeInfo.AllowsEndpoint(request.Method, request.Path))
-                return null;
+        public string Method => _typeInfo.RoutingAttribute.Method;
 
-            var model = Activator.CreateInstance(typeof(T));
+        public string Route => _typeInfo.RoutingAttribute.RoutePattern;
+
+        public object Bind(HttpRequest request, CancellationToken ct)
+        {
+            var model = Activator.CreateInstance(typeof(TRequest))
+                ?? throw new Exception($"Type {typeof(TRequest).Name} must have a parameterless constructor.");
+
             var valueProviders = new ValueProviderFactory(request);
 
             foreach(var property in _typeInfo.Properties)
@@ -40,13 +43,13 @@ namespace Controlless
 
         public ModelTypeInfo(Type type)
         {
-            this._type = type;
+            _type = type;
+
+            RoutingAttribute = _type.GetCustomAttribute<RouteAttribute>()
+                ?? throw new Exception($"Type {_type.Name} does not have a valid RouteAttribute");
         }
 
-        internal bool AllowsEndpoint(string method, PathString path)
-        {
-            return false;
-        }
+        public RouteAttribute RoutingAttribute { get; }
 
         public IEnumerable<ModelProperty> Properties
             => _type.GetProperties(BindingFlags.Public | BindingFlags.SetProperty)
@@ -60,15 +63,15 @@ namespace Controlless
             PropertyInfo = property;
         }
 
-        public PropertyInfo PropertyInfo { get; }
+        private PropertyInfo PropertyInfo { get; }
 
         public string Name => PropertyInfo.Name;
 
         public BindingSource BindingSource => BindingSource.Body;
 
-        public void SetValue(object? model, object p)
+        public void SetValue(object? model, object value)
         {
-            throw new NotImplementedException();
+            PropertyInfo.SetValue(model, value);
         }
     }
 }
