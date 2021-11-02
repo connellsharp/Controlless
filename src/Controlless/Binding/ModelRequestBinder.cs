@@ -30,7 +30,8 @@ namespace Controlless
             foreach(var property in _typeInfo.Properties)
             {
                 var valueProvider = valueProviders.Create(property.BindingSource);
-                property.SetValue(model, valueProvider.GetValue(property.Name));
+                var value = valueProvider.GetValue(property.Name);
+                property.SetValue(model, value);
             }
 
             return model;
@@ -61,17 +62,22 @@ namespace Controlless
         public ModelProperty(PropertyInfo property)
         {
             PropertyInfo = property;
+
+            BindingAttribute = PropertyInfo.GetCustomAttribute<BindAttribute>();
         }
 
         private PropertyInfo PropertyInfo { get; }
 
-        public string Name => PropertyInfo.Name;
+        private BindAttribute? BindingAttribute { get; }
 
-        public BindingSource BindingSource => BindingSource.Body;
+        public string Name => BindingAttribute?.Key ?? PropertyInfo.Name;
+
+        public BindingSource BindingSource => BindingAttribute?.Source ?? BindingSource.Route;
 
         public void SetValue(object? model, object value)
         {
-            PropertyInfo.SetValue(model, value);
+            var convertedValue = ConversionUtility.ConvertValue(value, PropertyInfo.PropertyType);
+            PropertyInfo.SetValue(model, convertedValue);
         }
     }
 }

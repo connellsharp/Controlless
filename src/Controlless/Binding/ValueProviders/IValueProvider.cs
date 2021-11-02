@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
@@ -39,7 +41,7 @@ namespace Controlless
 
         public object GetValue(string name)
         {
-            throw new NotImplementedException();
+            return _routeValues[name] ?? throw new KeyNotFoundException($"No route value called '{name}'");
         }
     }
 
@@ -54,7 +56,7 @@ namespace Controlless
 
         public object GetValue(string name)
         {
-            throw new NotImplementedException();
+            return _query[name];
         }
     }
 
