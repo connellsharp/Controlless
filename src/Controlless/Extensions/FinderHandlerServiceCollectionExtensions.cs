@@ -12,6 +12,7 @@ namespace Controlless
                 throw new ArgumentNullException(nameof(services));
 
             services.AddSingleton(typeof(RequestHandlerWeakAdapter<>));
+            services.AddSingleton(typeof(ResponseWriterWeakAdapter<>));
             services.AddSingleton(typeof(IResponseWriter<>), typeof(JsonResponseWriter<>));
         }
     }

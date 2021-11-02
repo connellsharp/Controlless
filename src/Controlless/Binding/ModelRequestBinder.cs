@@ -52,7 +52,7 @@ namespace Controlless
         public RouteAttribute RoutingAttribute { get; }
 
         public IEnumerable<ModelProperty> Properties
-            => _type.GetProperties(BindingFlags.Public | BindingFlags.SetProperty)
+            => _type.GetProperties(BindingFlags.Public | BindingFlags.Instance)
                    .Select(property => new ModelProperty(property));
     }
 
