@@ -4,39 +4,17 @@ Controlless is a little experiment with ASP.NET to see if we can make APIs witho
 
 ## Binding
 
-Register as many `IRequestBinder` implementations as you need. These will bind the `HttpRequest` to a request DTO.
+Just put these familiar-looking attributes straight onto your request DTO.
 
 ```c#
-internal class WatchFilmRequestBinder : IRequestBinder
-{
-    public object? Bind(HttpRequest request, CancellationToken ct)
-    {
-        if(request.Method != "POST" || !request.TryMatchRoute("/films/{id}/watch", out var routeValues))
-            return null;
-            
-        return new WatchFilmRequest
-        {
-            FilmId = routeValues["id"],
-            // set other props from query or body
-        };
-    }
-}
-```
-
-Or instead, maybe you could hook up a generic binder that uses attributes to bind straight onto the DTOs.
-
-```c#
-[HttpPut("/things/{id}/details")]
-public class UpdateThingDetailsRequest
+[HttpGet("/films/{id}/actors")]
+public class GetFilmActorsRequest
 {
     [FromRoute("id")]
-    public string ThingId { get; set; }
+    public string FilmId { get; set; }
 
-    [FromBody]
-    public string Name { get; set; }
-
-    [FromBody]
-    public string Type { get; set; }
+    [FromQuery("page")]
+    public int Page { get; set; }
 }
 ```
 
@@ -45,9 +23,9 @@ public class UpdateThingDetailsRequest
 Then you register an `IRequestHandler<T>` that does the work and returns a response object.
 
 ```c#
-public class WatchFilmRequestHandler : IRequestHandler<WatchFilmRequest>
+public class GetFilmActorsRequestHandler : IRequestHandler<GetFilmActorsRequest>
 {
-    public Task<object> Handle(WatchFilmRequest request, CancellationToken ct)
+    public Task<object> Handle(GetFilmActorsRequest request, CancellationToken ct)
     {
         // handle the request
         return responseObject;
@@ -55,7 +33,7 @@ public class WatchFilmRequestHandler : IRequestHandler<WatchFilmRequest>
 }
 ```
 
-Or maybe you just register a generic one that forwards everything to MediatR.
+Or maybe you just register a generic handler that forwards everything to MediatR.
 
 ```c#
 public class MediatorRequestHandler<TRequest> : IRequestHandler<TRequest>
@@ -76,7 +54,7 @@ public class MediatorRequestHandler<TRequest> : IRequestHandler<TRequest>
 
 ## Responding
 
-Then finally, an `IResponseWriter<T>` writes that object back to the HTTP stream. For example, you could create one for validation failures.
+Then finally, an `IResponseWriter<T>` writes the response object back to the HTTP stream. For example, you could create one for validation failures.
 
 ```c#
 internal class ValidationFailureJsonResponseWriter : IResponseWriter<ValidationFailure>
