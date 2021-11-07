@@ -1,9 +1,11 @@
+using Microsoft.AspNetCore.Mvc;
+
 namespace Controlless.FunctionalTests.Sample
 {
-    [HttpGet("/test/{id}")]
+    [ControlGet("/test/{id}")]
     public class TestRequest
     {
-        [FromRoute("id")]
+        [FromRoute]
         public int Id { get; set; }
     }
 }

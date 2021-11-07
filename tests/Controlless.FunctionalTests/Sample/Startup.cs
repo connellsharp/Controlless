@@ -9,7 +9,8 @@ namespace Controlless.FunctionalTests.Sample
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddRequestModelBinders(typeof(Startup));
+            //services.AddRequestModelBinders(typeof(Startup));
+            services.AddRequestObjects();
 
             services.AddSingleton(typeof(IRequestHandler<TestRequest>), typeof(TestRequestHandler));
         }
@@ -20,7 +21,8 @@ namespace Controlless.FunctionalTests.Sample
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapBinders();
+                //endpoints.MapBinders();
+                endpoints.MapControllers();
             });
         }
     }
