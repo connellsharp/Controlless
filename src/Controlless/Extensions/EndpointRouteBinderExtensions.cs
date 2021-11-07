@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
+using Controlless.Custom;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Controlless
 {
+    [Obsolete("Looking into using dynamic controllers instead")]
     public static class EndpointRouteBinderExtensions
     {
         public static void MapBinders(

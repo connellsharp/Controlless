@@ -1,6 +1,6 @@
 using System;
 
-namespace Controlless
+namespace Controlless.Custom
 {
     public class BindAttribute : Attribute
     {

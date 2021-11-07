@@ -1,10 +1,12 @@
 using System;
 using System.Linq;
 using System.Reflection;
+using Controlless.Custom;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Controlless
 {
+    [Obsolete("Looking into using dynamic controllers instead")]
     public static class FinderHandlerServiceCollectionExtensions
     {
         public static void AddControllessCore(this IServiceCollection services)

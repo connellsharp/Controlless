@@ -1,4 +1,4 @@
-namespace Controlless
+namespace Controlless.Custom
 {
     internal enum BindingSource
     {

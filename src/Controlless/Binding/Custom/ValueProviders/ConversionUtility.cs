@@ -1,6 +1,6 @@
 using System;
 
-namespace Controlless
+namespace Controlless.Custom
 {
     /// <summary>
     /// An all-powerful super conversion tool to try convert anything from anything.

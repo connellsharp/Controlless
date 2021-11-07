@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Threading;
 using Microsoft.AspNetCore.Http;
 
-namespace Controlless
+namespace Controlless.Custom
 {
     public class ModelRequestBinder<TRequest> : IRequestBinder
     {

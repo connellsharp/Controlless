@@ -5,7 +5,7 @@ using System.IO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 
-namespace Controlless
+namespace Controlless.Custom
 {
     internal interface IValueProvider
     {
