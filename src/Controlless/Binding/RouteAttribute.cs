@@ -15,33 +15,33 @@ namespace Controlless
         public string RoutePattern { get; }
     }
 
-    public class ControlGetAttribute : RouteAttribute
+    public class RouteGetAttribute : RouteAttribute
     {
-        public ControlGetAttribute(string routePattern)
+        public RouteGetAttribute(string routePattern)
             : base("GET", routePattern) { }
     }
 
-    public class ControlPostAttribute : RouteAttribute
+    public class RoutePostAttribute : RouteAttribute
     {
-        public ControlPostAttribute(string routePattern)
+        public RoutePostAttribute(string routePattern)
             : base("POST", routePattern) { }
     }
 
-    public class ControlPutAttribute : RouteAttribute
+    public class RoutePutAttribute : RouteAttribute
     {
-        public ControlPutAttribute(string routePattern)
+        public RoutePutAttribute(string routePattern)
             : base("PUT", routePattern) { }
     }
 
-    public class ControlPatchAttribute : RouteAttribute
+    public class RoutePatchAttribute : RouteAttribute
     {
-        public ControlPatchAttribute(string routePattern)
+        public RoutePatchAttribute(string routePattern)
             : base("PATCH", routePattern) { }
     }
 
-    public class ControlDeleteAttribute : RouteAttribute
+    public class RouteDeleteAttribute : RouteAttribute
     {
-        public ControlDeleteAttribute(string routePattern)
+        public RouteDeleteAttribute(string routePattern)
             : base("DELETE", routePattern) { }
     }
 }
