@@ -14,20 +14,40 @@ namespace Controlless.FunctionalTests
             _client = factory.CreateClient();
         }
 
-        [Theory]
-        [InlineData(123)]
-        [InlineData(4321)]
-        public async Task TestResponseContainsIdFromUrl(int testId)
+        [Fact]
+        public async Task TestResponseContainsIdFromUrl()
         {
-            var response = await _client.PostAsJsonAsync("/test/" + testId, new {
+            var response = await _client.PostAsJsonAsync("/test/4321", new { });
+
+            response.EnsureSuccessStatusCode();
+            var responseString = await response.Content.ReadAsStringAsync();
+
+            Assert.Contains("4321", responseString);
+        }
+
+        [Fact]
+        public async Task TestResponseContainsIdFromBody()
+        {
+            var response = await _client.PostAsJsonAsync("/test/123", new
+            {
                 bodyString = "SomeValue"
             });
 
             response.EnsureSuccessStatusCode();
-
             var responseString = await response.Content.ReadAsStringAsync();
 
-            Assert.Contains(testId.ToString(), responseString);
+            Assert.Contains("SomeValue", responseString);
+        }
+
+        [Fact]
+        public async Task TestResponseContainsIdFromQuery()
+        {
+            var response = await _client.PostAsJsonAsync("/test/123?myKey=abcde", new { });
+
+            response.EnsureSuccessStatusCode();
+            var responseString = await response.Content.ReadAsStringAsync();
+
+            Assert.Contains("abcde", responseString);
         }
     }
 }

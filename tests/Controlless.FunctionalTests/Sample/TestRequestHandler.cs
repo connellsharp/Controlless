@@ -9,7 +9,9 @@ namespace Controlless.FunctionalTests.Sample
         {
             return new
             {
-                requestId = request.Id
+                requestId = request.Id,
+                requestBodyString = request.Body.BodyString,
+                requestQueryKey = request.MyKey
             };
         }
     }
