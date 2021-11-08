@@ -5,15 +5,15 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Controlless
 {
-    public static class RequestHandlerServiceCollectionExtensions
+    public static class ServiceCollectionRequestHandlerExtensions
     {
-        public static void AddRequestHandlers(this IServiceCollection services)
-            => services.AddRequestHandlers(Assembly.GetCallingAssembly());
+        public static void AddControllessRequestHandlers(this IServiceCollection services)
+            => services.AddControllessRequestHandlers(Assembly.GetCallingAssembly());
 
-        public static void AddRequestHandlers(this IServiceCollection services, Type type)
-            => services.AddRequestHandlers(type.Assembly);
+        public static void AddControllessRequestHandlers(this IServiceCollection services, Type type)
+            => services.AddControllessRequestHandlers(type.Assembly);
 
-        public static void AddRequestHandlers(this IServiceCollection services, Assembly assembly)
+        public static void AddControllessRequestHandlers(this IServiceCollection services, Assembly assembly)
         {
             var genericHandlerTypes = assembly.GetExportedTypes()
                 .Where(t => t.GetInterfaces().Any(i => i == typeof(IRequestHandler<>)));

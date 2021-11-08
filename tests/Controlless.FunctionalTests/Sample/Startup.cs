@@ -1,7 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 
 namespace Controlless.FunctionalTests.Sample
 {
@@ -9,9 +8,7 @@ namespace Controlless.FunctionalTests.Sample
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddRequestObjects();
-
-            services.AddRequestHandlers();
+            services.AddControllessRequests();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
