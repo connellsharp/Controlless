@@ -8,7 +8,8 @@ namespace Controlless.FunctionalTests.Sample
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllessRequests();
+            services.AddMvc().AddControllerlessRequests();
+            services.AddControllessHandlers();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

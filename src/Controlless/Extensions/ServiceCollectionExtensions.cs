@@ -6,13 +6,13 @@ namespace Controlless
 {
     public static class ServiceCollectionExtensions
     {
-        public static void AddControllessRequests(this IServiceCollection services)
+        public static void AddMvcAndControlless(this IServiceCollection services)
         {
             if (services == null)
                 throw new ArgumentNullException(nameof(services));
 
-            services.AddControllessRequestObjects();
-            services.AddControllessRequestHandlers(Assembly.GetCallingAssembly());
+            services.AddMvc().AddControllessRequests();
+            services.AddControllessHandlers(Assembly.GetCallingAssembly());
         }
     }
 }
