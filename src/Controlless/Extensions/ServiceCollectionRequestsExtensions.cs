@@ -20,7 +20,7 @@ namespace Controlless
             mvcBuilder.Services.Configure<MvcOptions>(o =>
             {
                 o.Conventions.Add(new GenericControllerRouteConvention());
-                //o.Filters.Add(new )
+                o.Filters.Add(new StatusCodeResultFilter());
             });
         }
     }
