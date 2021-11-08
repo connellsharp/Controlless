@@ -18,7 +18,7 @@ namespace Controlless
                     new GenericControllerRouteConvention()
                 )).
                 ConfigureApplicationPartManager(m => 
-                    m.FeatureProviders.Add(new GenericTypeControllerFeatureProvider()
+                    m.FeatureProviders.Add(new GenericControllerFeatureProvider()
                 ));
         }
     }
