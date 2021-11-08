@@ -4,10 +4,26 @@ Controlless is a little experiment with ASP.NET to see if we can make APIs witho
 
 ## Binding
 
-Just put these familiar-looking attributes straight onto your request DTO.
+Just put these `[RouteGet]` and `[RoutePost]` attributes and your action filters straight onto your request DTOs.
 
 ```c#
-[HttpGet("/films/{id}/actors")]
+[RoutePost("/films/{id}")]
+[Authorize]
+public class CreateFilmRequest
+{
+    [FromRoute("id")]
+    public string FilmId { get; set; }
+
+    [FromBody]
+    public Body Body { get; set; }
+
+    public class Body
+    {
+        public string Name { get; set; }
+    }
+}
+
+[RouteGet("/films/{id}/actors")]
 public class GetFilmActorsRequest
 {
     [FromRoute("id")]
@@ -54,27 +70,32 @@ public class MediatorRequestHandler<TRequest> : IRequestHandler<TRequest>
 
 ## Responding
 
-Then finally, an `IResponseWriter<T>` writes the response object back to the HTTP stream. For example, you could create one for validation failures.
+You can use the `[StatusCode]` attribute to respond with a different status code when a certain response type is returned.
 
 ```c#
-internal class ValidationFailureJsonResponseWriter : IResponseWriter<ValidationFailure>
+[StatusCode(201)]
+public class CreateFilmResponse
 {
-    public async Task Write(ValidationFailure responseObject, HttpResponse response, CancellationToken ct)
+    public string FilmId { get; set; }
+}
+```
+
+Or if you don't have control over the type, returning from a handler is exactly the same as returning from a controller. You could return an `IActionFilter` for example. Or you could register a global response filter to change the status code when a certain type is returned.
+
+```c#
+public class ValidationFailureResultFilter : IResultFilter
+{
+    public void OnResultExecuting(ResultExecutingContext context)
     {
-        response.StatusCode = 400;
-        await response.WriteAsync("Validation error", ct);
+        if(context.Result is ObjectResult objectResult
+            && objectResult.Value is List<ValidationFailure>)
+        {
+            context.HttpContext.Response.StatusCode = 400;
+        }
     }
 }
 ```
 
-No worries if you don't register one for every response type. It'll fall back to the generic registration that writes a JSON response.
+# Related articles
 
-```c#
-internal class JsonResponseWriter<T> : IResponseWriter<T>
-{
-    public async Task Write(T responseObject, HttpResponse response, CancellationToken ct)
-    {
-        await response.WriteAsJsonAsync(responseObject, ct);
-    }
-}
-```
+- [Look, no controllers](https://www.connell.dev/look-no-controllers)
