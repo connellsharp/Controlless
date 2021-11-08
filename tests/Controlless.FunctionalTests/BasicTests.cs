@@ -1,4 +1,5 @@
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -18,7 +19,9 @@ namespace Controlless.FunctionalTests
         [InlineData(4321)]
         public async Task TestResponseContainsIdFromUrl(int testId)
         {
-            var response = await _client.GetAsync("/test/" + testId);
+            var response = await _client.PostAsJsonAsync("/test/" + testId, new {
+                bodyString = "SomeValue"
+            });
 
             response.EnsureSuccessStatusCode();
 

@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Controlless.FunctionalTests.Sample
 {
-    [ControlGet("/test/{id}")]
+    [ControlPost("/test/{id}")]
     public class TestRequest
     {
         [FromRoute]
