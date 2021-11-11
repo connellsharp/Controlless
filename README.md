@@ -22,7 +22,9 @@ public class CreateFilmRequest
         public string Name { get; set; }
     }
 }
+```
 
+```c#
 [RouteGet("/films/{id}/actors")]
 public class GetFilmActorsRequest
 {
@@ -80,7 +82,7 @@ public class CreateFilmResponse
 }
 ```
 
-Or if you don't have control over the type, returning from a handler is exactly the same as returning from a controller. You could return an `IActionFilter` for example. Or you could register a global response filter to change the status code when a certain type is returned.
+Or if you don't have control over the type, returning from a handler is exactly the same as returning from a controller. You could return an `IActionResult` for example. Or you could register a global `IResultFilter` to change the status code when the type is returned.
 
 ```c#
 public class ValidationFailureResultFilter : IResultFilter
