@@ -98,6 +98,33 @@ public class ValidationFailureResultFilter : IResultFilter
 }
 ```
 
+# Setup
+
+It's just two extensions.
+
+- `.AddControllerlessRequests()` extends MVC to generate a controller for each request object with the `[RouteXxx]` attributes.
+- `.AddControllessHandlers()` registers all the `IRequestHandler<>` implementations found in the assembly.
+
+```c#
+public void ConfigureServices(IServiceCollection services)
+{
+    services.AddMvc()
+        .AddControllerlessRequests();
+        
+    services.AddControllessHandlers();
+}
+
+public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+{
+    app.UseRouting();
+
+    app.UseEndpoints(endpoints =>
+    {
+        endpoints.MapControllers();
+    });
+}
+```
+
 # Related articles
 
 - [Look, no controllers](https://www.connell.dev/look-no-controllers)
