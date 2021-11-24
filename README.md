@@ -79,6 +79,9 @@ You can use the `[StatusCode]` attribute to respond with a different status code
 public class CreateFilmResponse
 {
     public string FilmId { get; set; }
+    
+    [ResponseHeader]
+    public string Location => $"/films/{FilmId}";
 }
 ```
 

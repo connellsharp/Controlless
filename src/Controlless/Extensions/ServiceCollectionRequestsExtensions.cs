@@ -21,6 +21,7 @@ namespace Controlless
             {
                 o.Conventions.Add(new GenericControllerRouteConvention());
                 o.Filters.Add(new StatusCodeResultFilter());
+                o.Filters.Add(new ResponseHeaderResultFilter());
             });
         }
     }
